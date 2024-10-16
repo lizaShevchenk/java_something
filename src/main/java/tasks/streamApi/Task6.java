@@ -1,7 +1,5 @@
 package tasks.streamApi;
 
-import tasks.Employee;
-
 import java.util.List;
 
 import static java.util.Arrays.asList;
