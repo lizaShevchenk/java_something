@@ -1,4 +1,6 @@
-package tasks.task2;
+package tasks.library;
+
+import tasks.library.models.Publication;
 
 import java.util.Arrays;
 import java.util.Objects;

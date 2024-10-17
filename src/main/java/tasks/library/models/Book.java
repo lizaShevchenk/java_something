@@ -1,9 +1,9 @@
-package tasks.task2;
+package tasks.library.models;
 
 public class Book extends Publication {
     private String author;
 
-    Book(String name, int countPages, String author) {
+    public Book(String name, int countPages, String author) {
         super(name, countPages);
         this.author = author;
     }

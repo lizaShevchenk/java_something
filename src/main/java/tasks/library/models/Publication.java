@@ -1,12 +1,10 @@
-package tasks.task2;
+package tasks.library.models;
 
 public class Publication {
     private String name;
     private int countPages;
 
-    Publication() {}
-
-    Publication(String name, int countPages) {
+    public Publication(String name, int countPages) {
         this.name = name;
         this.countPages = countPages;
     }
