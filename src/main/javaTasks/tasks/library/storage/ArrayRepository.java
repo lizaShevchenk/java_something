@@ -7,19 +7,19 @@ import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class Storage implements Store {
+public class ArrayRepository implements Repository<Publication> {
     private Publication[] publications;
     private final int defaultSize = 16;
     private final int oneElementSize = 1;
     private int index = 0;
     private int size;
 
-    public Storage() {
+    public ArrayRepository() {
         this.publications = new Publication[defaultSize];
         this.size = defaultSize;
     }
 
-    public Storage(int size) {
+    public ArrayRepository(int size) {
         this.publications = new Publication[size];
         this.size = size;
     }
@@ -31,7 +31,7 @@ public class Storage implements Store {
     //
 
     @Override
-    public void addPublication(Publication publication) {
+    public void add(Publication publication) {
         if (publications.length == index) {
             increaseSize();
         }
@@ -47,7 +47,7 @@ public class Storage implements Store {
     }
 
     @Override
-    public void deletePublication(Publication publication) {
+    public void delete(Publication publication) {
         if (publication == null) {
             System.out.println("\nНельзя удалить пустую публикацию. Удаление не произошло.");
             return;
@@ -79,7 +79,7 @@ public class Storage implements Store {
     }
 
     @Override
-    public void deletePublicationByIndex(int index) {
+    public void deleteByIndex(int index) {
         if (Arrays.stream(publications).noneMatch(Objects::nonNull)) {
             System.out.println("\nВ хранилище нет публикаций. Нечего удалять. Удаление не произошло.");
             return;
@@ -92,11 +92,16 @@ public class Storage implements Store {
     }
 
     @Override
-    public Publication getPublicationByIndex(int index) {
+    public Publication getByIndex(int index) {
         if (index >= 0 && index < publications.length) {
             return publications[index];
         }
         return null;
+    }
+
+    @Override
+    public Publication[] getAll() {
+        return publications;
     }
 
     @Override

@@ -6,25 +6,25 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class ListStorage implements Store{
+public class ListRepository implements Repository<Publication> {
     private List<Publication> publications;
     private final int defaultSize = 16;
 
-    public ListStorage() {
+    public ListRepository() {
         this.publications = new ArrayList<>(defaultSize);
     }
 
-    public ListStorage(int size) {
+    public ListRepository(int size) {
         this.publications = new ArrayList<>(size);
     }
 
     @Override
-    public void addPublication(Publication publication) {
+    public void add(Publication publication) {
         publications.add(publication);
     }
 
     @Override
-    public void deletePublication(Publication publication) {
+    public void delete(Publication publication) {
         if (publication == null) {
             System.out.println("\nНельзя удалить пустую публикацию. Удаление не произошло.");
             return;
@@ -42,7 +42,7 @@ public class ListStorage implements Store{
     }
 
     @Override
-    public void deletePublicationByIndex(int index) {
+    public void deleteByIndex(int index) {
         if (publications.stream().noneMatch(Objects::nonNull)) {
             System.out.println("\nВ хранилище нет публикаций. Нечего удалять. Удаление не произошло.");
             return;
@@ -55,11 +55,16 @@ public class ListStorage implements Store{
     }
 
     @Override
-    public Publication getPublicationByIndex(int index) {
+    public Publication getByIndex(int index) {
         if (index >= 0 && index < publications.size()) {
             return publications.get(index);
         }
         return null;
+    }
+
+    @Override
+    public List<Publication> getAll() {
+        return publications;
     }
 
     @Override

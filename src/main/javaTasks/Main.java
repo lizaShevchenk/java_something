@@ -1,75 +1,7 @@
-import tasks.library.author.Author;
-import tasks.library.controller.Controller;
-import tasks.library.Library;
-import tasks.library.models.Book;
-import tasks.library.models.Journal;
-import tasks.library.models.Publication;
-import tasks.library.storage.InMemoryAuthorStorage;
-import tasks.library.storage.ListStorage;
-import tasks.library.storage.Storage;
-
-import java.util.Arrays;
-
 public class Main {
+
     public static void main(String[] args) {
-        InMemoryAuthorStorage inMemoryAuthorStorage = new InMemoryAuthorStorage();
-        inMemoryAuthorStorage.addAuthor(new Author(1L, "Leo", "Last", "leo.last@blabla.com"));
-        inMemoryAuthorStorage.addAuthor(new Author(2L, "Serhii", "Serhii", "serhii.serhii@blabla.com"));
-        inMemoryAuthorStorage.addAuthor(new Author(2L, "Serhii", "Serhii", "serhii.serhii@blabla.com"));
-        inMemoryAuthorStorage.addAuthor(new Author(2L, "Sasha", "Y", "sasha.y@blabla.com"));
-        inMemoryAuthorStorage.addAuthor(new Author(3L, "Sasha", "Y", "sasha.y@blabla.com"));
-        inMemoryAuthorStorage.addAuthor(new Author(4L, "Sasha", "Y1", "sasha.y1@blabla.com"));
-        inMemoryAuthorStorage.addAuthor(new Author(5L, "Sasha 1", "Y2", "sasha.y2@blabla.com"));
-        inMemoryAuthorStorage.addAuthor(new Author(6L, "Sasha 2", "Y3", "sasha.y3@blabla.com"));
-        inMemoryAuthorStorage.addAuthor(new Author(7L, "test", "Test", "test.test@blabla.com"));
-
-
-
-        long authorId = 0;
-
-        Publication[] publications = new Publication[4];
-        publications[0] = new Journal("journal", 100, 1, 2000);
-        publications[1] = new Book("book", 150, 1L);
-        publications[2] = new Publication(null, 20);
-        publications[3] = null;
-
-//        Storage storage = new Storage(2);
-        Storage storage1 = new Storage(4);
-//        Arrays.stream(publications).forEach(storage::addPublication);
-        new Library().printPublications(publications);
-
-        for (int i = 0; i < 4; i++) {//checking storage increase, should increase 4 times: 4->6->9->13->19
-            Arrays.stream(publications).forEach(storage1::addPublication);
-        }
-
-        //Task 2
-        Storage storage = new Storage(6);
-        Arrays.stream(publications).forEach(storage::addPublication);
-
-        System.out.println(storage);
-        storage.deletePublication(publications[0]);
-        storage.deletePublication(null);
-        storage.deletePublication(new Publication(null, 20));
-        storage.deletePublication(new Publication(null, 0));
-        System.out.println(storage);
-
-        Storage emptyStorage = new Storage();
-        emptyStorage.deletePublication(publications[0]);
-
-        emptyStorage.deletePublicationByIndex(0);
-        System.out.println("args = " + storage.getPublicationByIndex(0).print());
-        storage.deletePublicationByIndex(0);
-        System.out.println(storage);
-
-        ListStorage listStorage = new ListStorage();
-        listStorage.addPublication(publications[0]);
-        listStorage.addPublication(publications[1]);
-        listStorage.deletePublication(publications[0]);
-        System.out.println(listStorage);
-
-        Controller controller = new Controller(inMemoryAuthorStorage);
-        controller.start();
-
+        Dispatcher.initialise();
     }
 
     private void task2() {

@@ -4,16 +4,18 @@ import tasks.library.author.Author;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
-public class InMemoryAuthorStorage {
+public class InMemoryAuthorStorage implements Repository<Author> {
     List<Author> authorList;
-    int numberOfAuthorsPerPage = 10;
 
     public InMemoryAuthorStorage() {
         this.authorList = new ArrayList<>();
+    }
+
+    @Override
+    public List<Author> getAll() {
+        return authorList;
     }
 
     public Author findById(long id) {
@@ -33,12 +35,14 @@ public class InMemoryAuthorStorage {
         return authorList.stream().filter(author -> author.getEmail().equals(email)).findFirst().orElse(null);
     }
 
-    public void addAuthor(Author author) {
+    @Override
+    public void add(Author author) {
         if (authorList.contains(author) || authorAlreadyExistCheck(author)) {
-            System.out.println("Этот автор уже есть в системе.");
+            System.out.println("Author already exist in system: " + author.toString());
             return;
         }
         authorList.add(author);
+        System.out.println("Added author: " + author.toString());
     }
 
     public void deleteAuthor(String email) {
@@ -61,66 +65,29 @@ public class InMemoryAuthorStorage {
 
     private boolean authorAlreadyExistCheck(Author author) {
         if (authorList.stream().anyMatch(a -> a.getId() == author.getId())) {
-            System.out.println("Уже существует автор с таким ИД.");
+            System.out.println("Already exist author with same ID, author you wanted to add: " + author);
             return true;
         }
         if (authorList.stream().anyMatch(a -> a.getEmail().equals(author.getEmail()))) {
-            System.out.println("Уже существует автор с таким почтовым адресом.");
+            System.out.println("Already exist author with the same email address, author you wanted to add: " + author);
             return true;
         }
         return false;
     }
 
-    public Author selectAnAuthor(Scanner scanner) {
-        if (authorList.isEmpty()) {
-            System.out.println("В хранилище пусто. Нужно добавить авторов.");
-            return null;
-        }
-        int pageIndex = 1;
-        Author author = null;
-
-        while (author == null) {
-            System.out.println("Выберите автора из списка за ИД или нажмите 'next' или 'prev' для пролистывания:");
-            showAuthors(pageIndex);
-            scanner.nextLine();
-            String value = scanner.nextLine();
-            if (value.equalsIgnoreCase("next")) {
-                pageIndex++;
-                showAuthors(pageIndex);
-            }
-            if (value.equalsIgnoreCase("prev")) {
-                pageIndex--;
-                showAuthors(pageIndex);
-            }
-            System.out.println("\npageIndex = " + pageIndex);
-            try {
-                author = findById(Long.parseLong(value));
-            } catch (Exception e) {
-                System.out.println("Error: " + e);
-            }
-        }
-
-        return author;
+    @Override
+    public void delete(Author object) {
+        authorList.remove(object);
     }
 
-    public void showAuthors(int pageIndex) {
-        double pagesCount = (double) authorList.size() / numberOfAuthorsPerPage;
-        if (pagesCount < 0) {
-            System.out.printf("Это весь список авторов. Пагинация недоступна. \n%s", authorList);
-            return;
-        }
-        if (pageIndex > pagesCount && (pageIndex - pagesCount) < 1) {
-            System.out.printf("Последняя страница хранилища:\n%s", authorList.subList((pageIndex - 1) * numberOfAuthorsPerPage, authorList.size() - 1));
-            return;
-        }
-        if (pageIndex < 1) {
-            System.out.printf("1 страница:\n%s", authorList.subList(0, numberOfAuthorsPerPage - 1));
-        }
-        if (pageIndex < pagesCount) {
-            System.out.printf("%s страница:\n%s", pageIndex, authorList.subList((pageIndex - 1) * numberOfAuthorsPerPage, pageIndex * numberOfAuthorsPerPage - 1));
-            return;
-        }
-        System.out.println("Need to investigate this error.");
+    @Override
+    public void deleteByIndex(int index) {
+        authorList.remove(index);
+    }
+
+    @Override
+    public Author getByIndex(int index) {
+        return authorList.get(index);
     }
 
     @Override
