@@ -11,7 +11,7 @@ public class Exit implements  Command {
 
     @Override
     public Boolean canHandle(String command) {
-        return command.equalsIgnoreCase(CommandNames.EXIT.getCommandName());
+        return command.equalsIgnoreCase(CommandNames.EXIT.getCode());
     }
 
     @Override

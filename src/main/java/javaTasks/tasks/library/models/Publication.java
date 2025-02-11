@@ -11,11 +11,11 @@ public class Publication {
         this.countPages = countPages;
     }
 
-    protected String getName() {
+    public String getName() {
         return name;
     }
 
-    protected int getCountPages() {
+    public int getCountPages() {
         return countPages;
     }
 

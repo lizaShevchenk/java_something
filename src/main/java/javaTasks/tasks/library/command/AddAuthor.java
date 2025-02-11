@@ -3,12 +3,15 @@ package javaTasks.tasks.library.command;
 import javaTasks.tasks.library.author.Author;
 import javaTasks.tasks.library.command.utils.CommandUtil;
 import javaTasks.tasks.library.controller.View;
+import javaTasks.tasks.library.exceptions.AuthorRepositoryException;
 import javaTasks.tasks.library.storage.Repository;
+
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class AddAuthor extends CommandUtil implements Command {
 
     private final View view;
-    private Repository<Author> authorRepository;
+    private final Repository<Author> authorRepository;
 
     public AddAuthor(View view, Repository<Author> authorRepository) {
         super(view, authorRepository);
@@ -18,7 +21,7 @@ public class AddAuthor extends CommandUtil implements Command {
 
     @Override
     public Boolean canHandle(String command) {
-        return command.equalsIgnoreCase(CommandNames.ADD_AUTHOR.getCommandName());
+        return command.equalsIgnoreCase(CommandNames.ADD_AUTHOR.getCode());
     }
 
     @Override
@@ -28,13 +31,14 @@ public class AddAuthor extends CommandUtil implements Command {
          while (true) {
              command = view.read();
              if (command.equalsIgnoreCase("c")) {
-                 addAuthor();
+                 AtomicInteger atomicInteger = new AtomicInteger();
+                 addAuthor(atomicInteger);
                  break;
              }
              if (command.equalsIgnoreCase("m")) {
                  view.write("Enter count of authors to create: ");
                  int count = view.readInt();
-                 Author.addAuthors(count, authorRepository);
+//                 Author.addAuthors(count, authorRepository);
                  break;
              }
              view.write("Incorrect command, please enter again ('c' or 'm'):");
@@ -43,7 +47,25 @@ public class AddAuthor extends CommandUtil implements Command {
 
     }
 
-    private void addAuthor() {
+    private void addAuthor(AtomicInteger atomicInteger) {
+        Author author = getAuthor();
+        if (authorRepository.get().stream().anyMatch(a -> a.getEmail().equals(author.getEmail()))) {
+            view.write("Author with this email already exist. PLease try again.");
+            while (atomicInteger.getAndIncrement() < 3) addAuthor(atomicInteger);
+        }
+
+        try {
+            authorRepository.add(author);
+        } catch (AuthorRepositoryException ex) {
+            view.write("Something wrong when adding journal. Error: " + ex.getMessage().replace("\n", "\t"));
+            while (atomicInteger.getAndIncrement() < 3) {
+                view.write("Please try again.");
+                handle();
+            }
+        }
+    }
+
+    private Author getAuthor() {
         String firstName, lastName, email;
         view.write("Add author. \nPlease enter first name: ");
         firstName = view.read();
@@ -51,7 +73,6 @@ public class AddAuthor extends CommandUtil implements Command {
         lastName = view.read();
         view.write("\nPlease enter email: ");
         email = view.read();
-
-        authorRepository.add(new Author(firstName, lastName, email));
+        return new Author(firstName, lastName, email);
     }
 }

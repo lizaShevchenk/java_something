@@ -12,11 +12,11 @@ public class Help implements Command {
 
     @Override
     public Boolean canHandle(String command) {
-        return command.equalsIgnoreCase(CommandNames.HELP.getCommandName());
+        return command.equalsIgnoreCase(CommandNames.HELP.getCode());
     }
 
     @Override
     public void handle() {
-        view.write(String.format("Доступны команды: %s", CommandNames.getAllCommandNames()));
+        view.write(String.format("Command codes with command names: %s", CommandNames.getAllCommands()));
     }
 }

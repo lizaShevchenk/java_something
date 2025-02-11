@@ -1,51 +1,43 @@
 package javaTasks;
 
-import javaTasks.postgresql.config.DatabaseConnectionManager;
+import javaTasks.tasks.library.config.DatabaseConnectionManager;
+import javaTasks.tasks.library.config.PropertyConfig;
+import javaTasks.tasks.library.models.Book;
+import javaTasks.tasks.library.storage.AuthorRepository;
+import javaTasks.tasks.library.storage.BookRepository;
+import javaTasks.tasks.library.storage.JournalRepository;
+import javaTasks.tasks.library.storage.Repository;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.sql.Statement;
 
 public class Main {
 
     public static void main(String[] args) {
-//        Dispatcher.initialise(); previous task
+//        Dispatcher.initialise(); previous taskΩ
 
-        String filePath = "";
+//        String filePath = "/Users/shevchenko.fm/IdeaProjects/java_something/src/main/resources/sql/init.sql";
 
-        try (Connection connection = new DatabaseConnectionManager("localhost",
-                "java_somethingdb",
-                "libuser", "libPwd").getConnection()) {
-            String script = readSQLScript(filePath);
-//            executeScript(connection, script);done
-        } catch (SQLException | IOException e) {
-            throw new RuntimeException(e);
-        }
+//        DatabaseConnectionManager connectionManager = new DatabaseConnectionManager(PropertyConfig.getHost(), PropertyConfig.getDbName(),
+//                PropertyConfig.getUsername(), PropertyConfig.getPassword());
+//
+//        //JDBC init
+//        Repository<Book> bookRepository = new BookRepository(connectionManager);
+//        AuthorRepository authorRepository = new AuthorRepository(connectionManager);
+//        JournalRepository journalRepository = new JournalRepository(connectionManager);
+//
+//        Dispatcher.initialise(authorRepository, bookRepository, journalRepository);
+
     }
 
-    public static String readSQLScript(String filePath) throws IOException {
-        StringBuilder script = new StringBuilder();
-        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                script.append(line).append("\n");
-            }
-        }
-        return script.toString();
-    }
+    public static void initLibrary() {
+        DatabaseConnectionManager connectionManager = new DatabaseConnectionManager(
+                PropertyConfig.getHost(), PropertyConfig.getDbName(),
+                PropertyConfig.getUsername(), PropertyConfig.getPassword());
 
-    public static void executeScript(Connection connection, String script) throws SQLException {
-        try (Statement statement = connection.createStatement()) {
-            String[] sqlCommands = script.split(";");
-            for (String sqlCommand : sqlCommands) {
-                if (!sqlCommand.trim().isEmpty()) {
-                    statement.addBatch(sqlCommand);
-                }
-            }
-            statement.executeBatch();
-        }
+        //JDBC init
+        Repository<Book> bookRepository = new BookRepository(connectionManager);
+        AuthorRepository authorRepository = new AuthorRepository(connectionManager);
+        JournalRepository journalRepository = new JournalRepository(connectionManager);
+
+        Dispatcher.initialise(authorRepository, bookRepository, journalRepository);
     }
 }

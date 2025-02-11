@@ -1,22 +1,22 @@
 package javaTasks.tasks.library.command;
 
-import javaTasks.tasks.library.author.Author;
 import javaTasks.tasks.library.controller.View;
+import javaTasks.tasks.library.models.Journal;
 import javaTasks.tasks.library.storage.Repository;
 
-public class ShowAuthors implements Command {
+public class ShowJournalRepository implements Command {
 
     private final View view;
-    private final Repository<Author> repository;
+    private final Repository<Journal> repository;
 
-    public ShowAuthors(View view, Repository<Author> repository) {
+    public ShowJournalRepository(View view, Repository<Journal> repository) {
         this.view = view;
         this.repository = repository;
     }
 
     @Override
     public Boolean canHandle(String command) {
-        return command.equalsIgnoreCase(CommandNames.SHOW_AUTHORS.getCode());
+        return command.equalsIgnoreCase(CommandNames.SHOW_JOURNALS.getCode());
     }
 
     @Override

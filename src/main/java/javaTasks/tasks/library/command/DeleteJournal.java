@@ -4,32 +4,39 @@ import javaTasks.tasks.library.controller.View;
 import javaTasks.tasks.library.models.Journal;
 import javaTasks.tasks.library.storage.Repository;
 
-public class AddJournal implements Command {
+public class DeleteJournal implements Command {
 
     private final View view;
     private final Repository<Journal> repository;
 
-    public AddJournal(View view, Repository<Journal> repository) {
+    public DeleteJournal(View view, Repository<Journal> repository) {
         this.view = view;
         this.repository = repository;
     }
 
     @Override
     public Boolean canHandle(String command) {
-        return command.equalsIgnoreCase(CommandNames.ADD_JOURNAL.getCode());
+        return command.equalsIgnoreCase(CommandNames.DELETE_JOURNAL.getCode());
     }
 
     @Override
     public void handle() {
-        view.write("Добавление журнала.");
-        Journal journal = getJournal();
-        try {
-            repository.add(journal);
-        } catch (RuntimeException ex) {
-            view.write("Something wrong when adding journal, try again. Error: " + ex.getMessage().replace("\n", "\t"));
+        view.write("Journal repository: " + repository.toString());
+        view.write("Удалить ПУБЛИКАЦИЮ по индексу? Нажмите 0. Удалить КНИГУ введя ее данные? Нажмите 1. To exit, press 2.");
+        int methodToDelete = view.readInt();
+        if (methodToDelete == 0) {
+            view.write("Введите индекс публикациии которую хотите удалить: ");
+            int index = view.readInt();
+            repository.deleteByIndex(index);
+        } else if (methodToDelete == 1) {
+            Journal journal = getJournal();
+            repository.delete(journal);
+        } else if (methodToDelete == 2) new Exit(view).handle();
+        else {
+            view.write("Вы не выбрали корректный метод. Попробуйте снова.");
             handle();
         }
-        System.out.println("Added journal " + journal.print());
+        view.write("Storage " + repository);
     }
 
     private Journal getJournal() {

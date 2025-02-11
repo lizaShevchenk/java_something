@@ -1,22 +1,22 @@
 package javaTasks.tasks.library.command;
 
 import javaTasks.tasks.library.controller.View;
-import javaTasks.tasks.library.models.Publication;
+import javaTasks.tasks.library.models.Book;
 import javaTasks.tasks.library.storage.Repository;
 
-public class ShowStorage implements Command {
+public class ShowBookRepository implements Command {
 
     private final View view;
-    private final Repository<Publication> repository;
+    private final Repository<Book> repository;
 
-    public ShowStorage(View view, Repository<Publication> repository) {
+    public ShowBookRepository(View view, Repository<Book> repository) {
         this.view = view;
         this.repository = repository;
     }
 
     @Override
     public Boolean canHandle(String command) {
-        return command.equalsIgnoreCase(CommandNames.SHOW_STORAGE.getCommandName());
+        return command.equalsIgnoreCase(CommandNames.SHOW_BOOKS.getCode());
     }
 
     @Override

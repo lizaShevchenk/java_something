@@ -15,4 +15,6 @@ public interface Repository<T> {
     List<T> get();
 
     String toString();
+
+    T getByValues(T object);
 }

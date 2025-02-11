@@ -1,5 +1,6 @@
 package javaTasks.tasks.library.controller;
 
+import java.time.Year;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 import java.util.regex.Pattern;
@@ -33,10 +34,13 @@ public class Console implements View {
 
     @Override
     public int readValueByPattern() {
+        String currentYear = Year.now().toString();
         try {
-            return Integer.parseInt(scanner.next(Pattern.compile("(19\\d{2}|20[01]\\d|202[0-4])")));
+            return Integer.parseInt(scanner.next(Pattern.compile(
+                    String.format("(19\\d{2}|20[01]\\d|202[0-%s])", currentYear.substring(currentYear.length() - 1)))));
         } catch (InputMismatchException | NumberFormatException e) {
             write("Введите корректный год публикации: ");
+            read();
             readValueByPattern();
         }
         return 0;

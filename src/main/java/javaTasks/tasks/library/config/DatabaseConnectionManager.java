@@ -1,4 +1,4 @@
-package javaTasks.postgresql.config;
+package javaTasks.tasks.library.config;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
@@ -12,6 +12,11 @@ public class DatabaseConnectionManager {
 
     public DatabaseConnectionManager(String host, String databaseName, String username, String pwd) {
         HikariConfig config = new HikariConfig();
+        try {
+            Class.forName("org.postgresql.Driver");
+        } catch (ClassNotFoundException ex) {
+            throw new RuntimeException("Error loading postgres driver", ex);
+        }
         config.setJdbcUrl(String.format("jdbc:postgresql://%s:5432/%s", host, databaseName));
         config.setUsername(username);
         config.setPassword(pwd);
