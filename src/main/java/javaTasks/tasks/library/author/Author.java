@@ -3,6 +3,7 @@ package javaTasks.tasks.library.author;
 import javaTasks.tasks.library.command.AddAuthor;
 import javaTasks.tasks.library.controller.View;
 import javaTasks.tasks.library.pagination.Pagination;
+import javaTasks.tasks.library.storage.AuthorRepository;
 import javaTasks.tasks.library.storage.Repository;
 
 import java.util.Objects;
@@ -30,7 +31,7 @@ public class Author {
         this.email = email;
     }
 
-    public static Author selectAnAuthor(View view, Repository<Author> authorList) {
+    public static Author selectAnAuthor(View view, AuthorRepository authorList) {
         if (authorList.get().isEmpty()) {
             view.write("Author list is empty! PLease add an author..");
             new AddAuthor(view, authorList).handle();

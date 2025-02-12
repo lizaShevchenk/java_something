@@ -4,6 +4,7 @@ import javaTasks.tasks.library.author.Author;
 import javaTasks.tasks.library.command.utils.CommandUtil;
 import javaTasks.tasks.library.controller.View;
 import javaTasks.tasks.library.exceptions.AuthorRepositoryException;
+import javaTasks.tasks.library.storage.AuthorRepository;
 import javaTasks.tasks.library.storage.Repository;
 
 import java.util.concurrent.atomic.AtomicInteger;
@@ -11,9 +12,9 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class AddAuthor extends CommandUtil implements Command {
 
     private final View view;
-    private final Repository<Author> authorRepository;
+    private final AuthorRepository authorRepository;
 
-    public AddAuthor(View view, Repository<Author> authorRepository) {
+    public AddAuthor(View view, AuthorRepository authorRepository) {
         super(view, authorRepository);
         this.view = view;
         this.authorRepository = authorRepository;
@@ -49,7 +50,7 @@ public class AddAuthor extends CommandUtil implements Command {
 
     private void addAuthor(AtomicInteger atomicInteger) {
         Author author = getAuthor();
-        if (authorRepository.get().stream().anyMatch(a -> a.getEmail().equals(author.getEmail()))) {
+        if (authorRepository.checkIfAuthorExistByEmail(author.getEmail())) {
             view.write("Author with this email already exist. PLease try again.");
             while (atomicInteger.getAndIncrement() < 3) addAuthor(atomicInteger);
         }

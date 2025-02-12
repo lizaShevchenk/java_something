@@ -10,16 +10,16 @@ public class DatabaseConnectionManager {
 
     private final HikariDataSource ds;
 
-    public DatabaseConnectionManager(String host, String databaseName, String username, String pwd) {
+    public DatabaseConnectionManager(PropertyConfig propertyConfig) {
         HikariConfig config = new HikariConfig();
         try {
             Class.forName("org.postgresql.Driver");
         } catch (ClassNotFoundException ex) {
             throw new RuntimeException("Error loading postgres driver", ex);
         }
-        config.setJdbcUrl(String.format("jdbc:postgresql://%s:5432/%s", host, databaseName));
-        config.setUsername(username);
-        config.setPassword(pwd);
+        config.setJdbcUrl(String.format("jdbc:postgresql://%s:5432/%s", propertyConfig.getHost(), propertyConfig.getDbName()));
+        config.setUsername(propertyConfig.getUsername());
+        config.setPassword(propertyConfig.getPassword());
 
         ds = new HikariDataSource(config);
     }

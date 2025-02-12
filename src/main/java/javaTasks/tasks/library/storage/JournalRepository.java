@@ -11,6 +11,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.time.Year;
 
 public class JournalRepository implements Repository<Journal> {
 
@@ -101,6 +102,13 @@ public class JournalRepository implements Repository<Journal> {
         } catch (SQLException e) {
             throw new JournalRepositoryException("Error when getting a journal by index!", e);
         }
+    }
+
+    public boolean checkPublicationYearByPattern(int publicationYearStr) throws IllegalArgumentException {
+        String currentYear = Year.now().toString();
+        String yearPattern = String.format("(19\\d{2}|20[01]\\d|202[0-%s])", currentYear.substring(currentYear.length() - 1));
+
+        return Integer.toString(publicationYearStr).matches(yearPattern);
     }
 
     private List<Journal> mapJournals(ResultSet resultSet) throws SQLException {

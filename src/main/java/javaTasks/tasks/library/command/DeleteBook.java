@@ -4,6 +4,7 @@ import javaTasks.tasks.library.author.Author;
 import javaTasks.tasks.library.command.utils.CommandUtil;
 import javaTasks.tasks.library.controller.View;
 import javaTasks.tasks.library.models.Book;
+import javaTasks.tasks.library.storage.AuthorRepository;
 import javaTasks.tasks.library.storage.Repository;
 
 public class DeleteBook extends CommandUtil implements Command {
@@ -11,7 +12,7 @@ public class DeleteBook extends CommandUtil implements Command {
     private final View view;
     private final Repository<Book> repository;
 
-    public DeleteBook(View view, Repository<Author> authorRepository, Repository<Book> repository) {
+    public DeleteBook(View view, AuthorRepository authorRepository, Repository<Book> repository) {
         super(view, authorRepository);
         this.view = view;
         this.repository = repository;

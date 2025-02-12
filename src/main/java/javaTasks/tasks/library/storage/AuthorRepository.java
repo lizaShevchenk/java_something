@@ -98,6 +98,10 @@ public class AuthorRepository implements Repository<Author> {
         }
     }
 
+    public boolean checkIfAuthorExistByEmail(String email) {
+        return get().stream().anyMatch(a -> a.getEmail().equals(email));
+    }
+
     @Override
     public String toString() {
         return get().stream().map(Author::toString).collect(Collectors.joining("\n"));

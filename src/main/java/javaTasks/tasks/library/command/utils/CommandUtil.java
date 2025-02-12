@@ -4,6 +4,7 @@ import javaTasks.tasks.library.author.Author;
 import javaTasks.tasks.library.controller.View;
 import javaTasks.tasks.library.exceptions.AuthorRepositoryException;
 import javaTasks.tasks.library.models.Book;
+import javaTasks.tasks.library.storage.AuthorRepository;
 import javaTasks.tasks.library.storage.Repository;
 
 import java.util.Optional;
@@ -11,9 +12,9 @@ import java.util.Optional;
 public class CommandUtil {
 
     private final View view;
-    private final Repository<Author> authorRepository;
+    private final AuthorRepository authorRepository;
 
-    protected CommandUtil(View view, Repository<Author> authorRepository) {
+    protected CommandUtil(View view, AuthorRepository authorRepository) {
         this.view = view;
         this.authorRepository = authorRepository;
     }

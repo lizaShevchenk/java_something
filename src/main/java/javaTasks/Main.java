@@ -15,9 +15,8 @@ public class Main {
 //        Dispatcher.initialise(); previous taskΩ
 
 //        String filePath = "/Users/shevchenko.fm/IdeaProjects/java_something/src/main/resources/sql/init.sql";
-
-//        DatabaseConnectionManager connectionManager = new DatabaseConnectionManager(PropertyConfig.getHost(), PropertyConfig.getDbName(),
-//                PropertyConfig.getUsername(), PropertyConfig.getPassword());
+//        PropertyConfig propertyConfig = new PropertyConfig();
+//        DatabaseConnectionManager connectionManager = new DatabaseConnectionManager(propertyConfig);
 //
 //        //JDBC init
 //        Repository<Book> bookRepository = new BookRepository(connectionManager);
@@ -29,9 +28,7 @@ public class Main {
     }
 
     public static void initLibrary() {
-        DatabaseConnectionManager connectionManager = new DatabaseConnectionManager(
-                PropertyConfig.getHost(), PropertyConfig.getDbName(),
-                PropertyConfig.getUsername(), PropertyConfig.getPassword());
+        DatabaseConnectionManager connectionManager = new DatabaseConnectionManager(new PropertyConfig());
 
         //JDBC init
         Repository<Book> bookRepository = new BookRepository(connectionManager);
