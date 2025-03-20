@@ -6,8 +6,18 @@ public class Publication {
     private String name;
     private int countPages;
 
+    public Publication() {}
+
     public Publication(String name, int countPages) {
         this.name = name;
+        this.countPages = countPages;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setCountPages(int countPages) {
         this.countPages = countPages;
     }
 

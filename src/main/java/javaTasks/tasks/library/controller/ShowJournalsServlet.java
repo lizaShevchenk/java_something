@@ -21,8 +21,9 @@ public class ShowJournalsServlet extends HttpServlet {
     private final JournalRepository journalRepository;
 
     public ShowJournalsServlet() {
-        DatabaseConnectionManager databaseConnectionManager = new DatabaseConnectionManager(new PropertyConfig());
-        this.journalRepository = new JournalRepository(databaseConnectionManager);
+//        DatabaseConnectionManager databaseConnectionManager = new DatabaseConnectionManager(new PropertyConfig());
+//        this.journalRepository = new JournalRepository(databaseConnectionManager);
+        this.journalRepository = new JournalRepository();
     }
 
     @Override
@@ -31,5 +32,10 @@ public class ShowJournalsServlet extends HttpServlet {
         req.setAttribute("journals", journals);
 
         req.getRequestDispatcher("/html/showJournals.jsp").forward(req, resp);
+    }
+
+    @Override
+    public void destroy() {
+        super.destroy();
     }
 }

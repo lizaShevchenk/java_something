@@ -1,33 +1,45 @@
 package javaTasks.tasks.library.models;
 
+import javaTasks.tasks.library.author.Author;
+
 import java.util.Objects;
 
 public class Book extends Publication {
-    private long authorId;
+    private Author author;
     private int id;
 
-    public Book(String name, int countPages, long authorId) {
+    public Book() {}
+
+    public Book(String name, int countPages, Author authorId) {
         super(name, countPages);
-        this.authorId = authorId;
+        this.author = authorId;
     }
 
-    public long getAuthorId() {
-        return authorId;
+    public Author getAuthor() {
+        return author;
     }
 
     public int getId() {
         return id;
     }
 
-    public Book(String name, int countPages, long authorId, int id) {
-        super(name, countPages);
-        this.authorId = authorId;
+    public void setId(int id) {
         this.id = id;
+    }
+
+    public Book(String name, int countPages, Author author, int id) {
+        super(name, countPages);
+        this.author = author;
+        this.id = id;
+    }
+
+    public void setAuthor(Author author) {
+        this.author = author;
     }
 
     @Override
     public String print() {
-        return String.format("Book{name=%s, countPages=%s, author=%s}", getName(), getCountPages(), authorId);
+        return String.format("Book{name=%s, countPages=%s, author=%s}", getName(), getCountPages(), author.toString());
     }
 
     @Override
@@ -36,11 +48,11 @@ public class Book extends Publication {
         if (object == null || getClass() != object.getClass()) return false;
         if (!super.equals(object)) return false;
         Book book = (Book) object;
-        return authorId == book.authorId && id == book.id;
+        return author == book.author && id == book.id;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), authorId, id);
+        return Objects.hash(super.hashCode(), author, id);
     }
 }

@@ -31,9 +31,10 @@ public class Main {
         DatabaseConnectionManager connectionManager = new DatabaseConnectionManager(new PropertyConfig());
 
         //JDBC init
-        Repository<Book> bookRepository = new BookRepository(connectionManager);
-        AuthorRepository authorRepository = new AuthorRepository(connectionManager);
-        JournalRepository journalRepository = new JournalRepository(connectionManager);
+//        Repository<Book> bookRepository = new BookRepository(connectionManager);
+        BookRepository bookRepository = new BookRepository();
+        AuthorRepository authorRepository = new AuthorRepository();
+        JournalRepository journalRepository = new JournalRepository();
 
         Dispatcher.initialise(authorRepository, bookRepository, journalRepository);
     }

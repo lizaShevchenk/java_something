@@ -17,7 +17,7 @@ CREATE TABLE libSchema.book(
     id SERIAL PRIMARY KEY,
     name VARCHAR(500),
     count_pages INT,
-    author_id INT,
+    author_id INT NOT NULL,
     FOREIGN KEY(author_id)
         REFERENCES libSchema.author
 );

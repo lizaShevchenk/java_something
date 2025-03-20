@@ -22,8 +22,8 @@ public class ShowAuthorsServlet extends HttpServlet {
     private final AuthorRepository authorRepository;
 
     public ShowAuthorsServlet() {
-        DatabaseConnectionManager databaseConnectionManager = new DatabaseConnectionManager(new PropertyConfig());
-        this.authorRepository = new AuthorRepository(databaseConnectionManager);
+//        DatabaseConnectionManager databaseConnectionManager = new DatabaseConnectionManager(new PropertyConfig());
+        this.authorRepository = new AuthorRepository();
     }
 
     @Override
@@ -32,5 +32,10 @@ public class ShowAuthorsServlet extends HttpServlet {
         req.setAttribute("authors", authors);
 
         req.getRequestDispatcher("/html/showAuthors.jsp").forward(req, resp);
+    }
+
+    @Override
+    public void destroy() {
+        super.destroy();
     }
 }

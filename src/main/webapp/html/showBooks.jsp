@@ -25,7 +25,7 @@
                 <tr>
                     <th>Book Name</th>
                     <th>Number of Pages</th>
-                    <th>Author ID</th>
+                    <th>Author</th>
                 </tr>
             </thead>
             <tbody>
@@ -34,7 +34,7 @@
                     <tr>
                         <td>${book.name}</td>
                         <td>${book.countPages}</td>
-                        <td>${book.authorId}</td>
+                        <td>${book.author.firstName} ${book.author.lastName}</td>
                     </tr>
                 </c:forEach>
             </tbody>

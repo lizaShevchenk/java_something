@@ -57,5 +57,37 @@
             <c:remove var="message" scope="session" />
         </c:if>
 
+    <!-- Body Section with Grouped Buttons -->
+    <div class="container mt-5">
+        <div class="row">
+            <!-- Authors Section -->
+            <div class="col-md-12 mb-4">
+                <h2 class="text-center text-muted">Authors</h2>
+                <div class="d-flex justify-content-center">
+                    <a href="/javaLearnApp/showAuthors" class="btn btn-secondary btn-lg mr-3">Show Authors</a>
+                    <a href="/javaLearnApp/addAuthor" class="btn btn-secondary btn-lg">Add Author</a>
+                </div>
+            </div>
+
+            <!-- Books Section -->
+            <div class="col-md-12 mb-4">
+                <h2 class="text-center text-muted">Books</h2>
+                <div class="d-flex justify-content-center">
+                    <a href="/javaLearnApp/showBooks" class="btn btn-secondary btn-lg mr-3">Show Books</a>
+                    <a href="/javaLearnApp/addBook" class="btn btn-secondary btn-lg">Add Book</a>
+                </div>
+            </div>
+
+            <!-- Journals Section -->
+            <div class="col-md-12 mb-4">
+                <h2 class="text-center text-muted">Journals</h2>
+                <div class="d-flex justify-content-center">
+                    <a href="/javaLearnApp/showJournals" class="btn btn-secondary btn-lg mr-3">Show Journals</a>
+                    <a href="/javaLearnApp/addJournal" class="btn btn-secondary btn-lg">Add Journal</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
     </body>
 </html>

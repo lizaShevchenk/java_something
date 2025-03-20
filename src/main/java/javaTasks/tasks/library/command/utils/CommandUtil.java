@@ -28,13 +28,12 @@ public class CommandUtil {
         view.write("Введите количество страниц (число) : ");
         countPages = view.readInt();
         view.write("Введите автора книги: ");
-        long authorId = Optional.ofNullable(Author
+        Author author = Optional.ofNullable(Author
                         .selectAnAuthor(view, authorRepository))
                 .stream()
                 .findFirst()
-                .orElseThrow(() -> new AuthorRepositoryException("Error when selecting an author!"))
-                .getId();
+                .orElseThrow(() -> new AuthorRepositoryException("Error when selecting an author!"));
 
-        return new Book(name, countPages, authorId);
+        return new Book(name, countPages, author);
     }
 }

@@ -1,8 +1,12 @@
 package javaTasks.tasks.library.storage;
 
 import javaTasks.tasks.library.config.DatabaseConnectionManager;
+import javaTasks.tasks.library.config.HibernateConnectionManager;
 import javaTasks.tasks.library.exceptions.JournalRepositoryException;
 import javaTasks.tasks.library.models.Journal;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
+import org.hibernate.query.Query;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -15,33 +19,46 @@ import java.time.Year;
 
 public class JournalRepository implements Repository<Journal> {
 
-    private final DatabaseConnectionManager connectionManager;
+//    private final DatabaseConnectionManager connectionManager;
 
-    private static final String INSERT = "INSERT INTO libSchema.journal(name, count_pages, number, publication_year) VALUES (?, ?, ?, ?)";
+    private final HibernateConnectionManager connectionManager;
+//
+//    private static final String INSERT = "INSERT INTO libSchema.journal(name, count_pages, number, publication_year) VALUES (?, ?, ?, ?)";
+//
+//    private static final String SELECT_ALL = "SELECT * FROM libSchema.journal";
+//
+//    private static final String SELECT_BY_ID = SELECT_ALL + " WHERE id = ?";
+//
+//    private static final String SELECT_ALL_BY_VALUES = SELECT_ALL + " WHERE name=? and count_pages=? and number=? and publication_year=?";
+//
+//    private static final String DELETE_BY_ID = "DELETE FROM libSchema.journal WHERE id = ?";
 
-    private static final String SELECT_ALL = "SELECT * FROM libSchema.journal";
+//    public JournalRepository(DatabaseConnectionManager connectionManager) {
+//        this.connectionManager = connectionManager;
+//    }
 
-    private static final String SELECT_BY_ID = SELECT_ALL + " WHERE id = ?";
-
-    private static final String SELECT_ALL_BY_VALUES = SELECT_ALL + " WHERE name=? and count_pages=? and number=? and publication_year=?";
-
-    private static final String DELETE_BY_ID = "DELETE FROM libSchema.journal WHERE id = ?";
-
-    public JournalRepository(DatabaseConnectionManager connectionManager) {
-        this.connectionManager = connectionManager;
+    public JournalRepository() {
+        this.connectionManager = new HibernateConnectionManager();
     }
 
     @Override
-    public void add(Journal entity) {
-        try (Connection connection = connectionManager.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(INSERT)) {
-            preparedStatement.setString(1, entity.getName());
-            preparedStatement.setInt(2, entity.getCountPages());
-            preparedStatement.setInt(3, entity.getNumber());
-            preparedStatement.setInt(4, entity.getPublicationYear());
-            preparedStatement.execute();
-        } catch (SQLException e) {
-            throw new JournalRepositoryException("Error when adding a journal!", e);
+    public void add(Journal journal) {
+//        try (Connection connection = connectionManager.getConnection();
+//             PreparedStatement preparedStatement = connection.prepareStatement(INSERT)) {
+//            preparedStatement.setString(1, entity.getName());
+//            preparedStatement.setInt(2, entity.getCountPages());
+//            preparedStatement.setInt(3, entity.getNumber());
+//            preparedStatement.setInt(4, entity.getPublicationYear());
+//            preparedStatement.execute();
+//        } catch (SQLException e) {
+//            throw new JournalRepositoryException("Error when adding a journal!", e);
+//        }
+        try (Session session = connectionManager.openSession()) {
+            Transaction transaction = session.beginTransaction();
+            session.merge(journal);
+            transaction.commit();
+        } catch (RuntimeException e) {
+            throw new JournalRepositoryException("Error when adding journal", e);
         }
     }
 
@@ -53,35 +70,42 @@ public class JournalRepository implements Repository<Journal> {
 
     @Override
     public void deleteByIndex(int index) {
-        try (Connection connection = connectionManager.getConnection();
-             PreparedStatement statement = connection.prepareStatement(DELETE_BY_ID)) {
-            statement.setInt(1, index);
-            statement.execute();
-        } catch (SQLException ex) {
-            throw new JournalRepositoryException("Error when deleting a journal!", ex);
-        }
+//        try (Connection connection = connectionManager.getConnection();
+//             PreparedStatement statement = connection.prepareStatement(DELETE_BY_ID)) {
+//            statement.setInt(1, index);
+//            statement.execute();
+//        } catch (SQLException ex) {
+//            throw new JournalRepositoryException("Error when deleting a journal!", ex);
+//        }
     }
 
     @Override
     public Journal getByIndex(int index) {
-        try (Connection connection = connectionManager.getConnection();
-             PreparedStatement statement = connection.prepareStatement(SELECT_BY_ID)) {
-            statement.setInt(1, index);
-            ResultSet resultSet = statement.executeQuery();
-            return mapJournals(resultSet).stream().findFirst().orElse(null);
-        } catch (SQLException ex) {
-            throw new JournalRepositoryException("Error when getting a journal by index!", ex);
-        }
+//        try (Connection connection = connectionManager.getConnection();
+//             PreparedStatement statement = connection.prepareStatement(SELECT_BY_ID)) {
+//            statement.setInt(1, index);
+//            ResultSet resultSet = statement.executeQuery();
+//            return mapJournals(resultSet).stream().findFirst().orElse(null);
+//        } catch (SQLException ex) {
+//            throw new JournalRepositoryException("Error when getting a journal by index!", ex);
+//        }
+        return null;
     }
 
     @Override
     public List<Journal> get() {
-        try (Connection connection = connectionManager.getConnection();
-             PreparedStatement statement = connection.prepareStatement(SELECT_ALL)) {
-            ResultSet resultSet = statement.executeQuery();
-            return mapJournals(resultSet);
-        } catch (SQLException ex) {
-            throw new JournalRepositoryException("Error when getting a journals!", ex);
+//        try (Connection connection = connectionManager.getConnection();
+//             PreparedStatement statement = connection.prepareStatement(SELECT_ALL)) {
+//            ResultSet resultSet = statement.executeQuery();
+//            return mapJournals(resultSet);
+//        } catch (SQLException ex) {
+//            throw new JournalRepositoryException("Error when getting a journals!", ex);
+//        }
+        try (Session session = connectionManager.openSession()) {
+            Query<Journal> query = session.createQuery("FROM Journal", Journal.class);
+            return query.list();
+        } catch (RuntimeException e) {
+            throw new JournalRepositoryException("Error when getting journals", e);
         }
     }
 
@@ -91,17 +115,18 @@ public class JournalRepository implements Repository<Journal> {
     }
 
     public Journal getByValues(Journal journal) {
-        try (Connection connection = connectionManager.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ALL_BY_VALUES)) {
-            preparedStatement.setString(1, journal.getName());
-            preparedStatement.setInt(2, journal.getCountPages());
-            preparedStatement.setInt(3, journal.getNumber());
-            preparedStatement.setInt(4, journal.getPublicationYear());
-            ResultSet resultSet = preparedStatement.executeQuery();
-            return mapJournals(resultSet).stream().findFirst().orElse(null);
-        } catch (SQLException e) {
-            throw new JournalRepositoryException("Error when getting a journal by index!", e);
-        }
+//        try (Connection connection = connectionManager.getConnection();
+//             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ALL_BY_VALUES)) {
+//            preparedStatement.setString(1, journal.getName());
+//            preparedStatement.setInt(2, journal.getCountPages());
+//            preparedStatement.setInt(3, journal.getNumber());
+//            preparedStatement.setInt(4, journal.getPublicationYear());
+//            ResultSet resultSet = preparedStatement.executeQuery();
+//            return mapJournals(resultSet).stream().findFirst().orElse(null);
+//        } catch (SQLException e) {
+//            throw new JournalRepositoryException("Error when getting a journal by index!", e);
+//        }
+        return null;
     }
 
     public boolean checkPublicationYearByPattern(int publicationYearStr) throws IllegalArgumentException {

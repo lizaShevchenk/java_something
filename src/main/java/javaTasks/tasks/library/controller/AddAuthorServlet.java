@@ -20,8 +20,8 @@ public class AddAuthorServlet extends HttpServlet {
     private final AuthorRepository authorRepository;
 
     public AddAuthorServlet() {
-        DatabaseConnectionManager databaseConnectionManager = new DatabaseConnectionManager(new PropertyConfig());
-        this.authorRepository = new AuthorRepository(databaseConnectionManager);
+//        DatabaseConnectionManager databaseConnectionManager = new DatabaseConnectionManager(new PropertyConfig());
+        this.authorRepository = new AuthorRepository();
     }
 
     @Override
@@ -49,5 +49,10 @@ public class AddAuthorServlet extends HttpServlet {
 
         req.getSession().setAttribute("message", "Author added successfully!");
         resp.sendRedirect(req.getContextPath() + "/index");
+    }
+
+    @Override
+    public void destroy() {
+        super.destroy();
     }
 }

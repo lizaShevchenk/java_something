@@ -10,13 +10,13 @@ import java.util.Objects;
 import java.util.UUID;
 
 public class Author {
-    private long id;
+    private Integer id;
     private String firstName;
     private String lastName;
     private String email;
     final static int numberOfAuthorsPerPage = 10;
 
-    public Author(long id, String firstName, String lastName, String email) {
+    public Author(Integer id, String firstName, String lastName, String email) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -57,7 +57,7 @@ public class Author {
             }
             view.write("\npageIndex = " + pageIndex);
             try {
-                if (authorList.get().stream().anyMatch(a -> (int) a.getId() == Integer.parseInt(value))) author = authorList.getByIndex(Integer.parseInt(value));
+                if (authorList.get().stream().anyMatch(a -> a.getId() == Integer.parseInt(value))) author = authorList.getByIndex(Integer.parseInt(value));
                 else {
                     view.write(String.format("There is no author with id %s! Please try to select an author again..", value));
                     selectAnAuthor(view, authorList);
@@ -87,11 +87,11 @@ public class Author {
         return String.format("Author: Id - %s, first name - %s, last name - %s, email - %s.", id, firstName, lastName, email);
     }
 
-    public long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -125,7 +125,7 @@ public class Author {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Author author = (Author) o;
-        return id == author.id && Objects.equals(firstName, author.firstName) && Objects.equals(lastName, author.lastName) && Objects.equals(email, author.email);
+        return Objects.equals(id, author.id) && Objects.equals(firstName, author.firstName) && Objects.equals(lastName, author.lastName) && Objects.equals(email, author.email);
     }
 
     @Override

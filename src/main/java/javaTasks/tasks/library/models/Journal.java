@@ -19,6 +19,20 @@ public class Journal extends Publication {
         return id;
     }
 
+    public void setNumber(int number) {
+        this.number = number;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setPublicationYear(int publicationYear) {
+        this.publicationYear = publicationYear;
+    }
+
+    public Journal() {}
+
     public Journal(String name, int countPages, int number, int publicationYear) {
         super(name, countPages);
         this.number = number;

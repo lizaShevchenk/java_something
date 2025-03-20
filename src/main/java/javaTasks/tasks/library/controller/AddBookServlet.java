@@ -23,9 +23,10 @@ public class AddBookServlet extends HttpServlet {
     private final AuthorRepository authorRepository;
 
     public AddBookServlet() {
-        DatabaseConnectionManager databaseConnectionManager = new DatabaseConnectionManager(new PropertyConfig());
-        this.bookRepository = new BookRepository(databaseConnectionManager);
-        this.authorRepository = new AuthorRepository(databaseConnectionManager);
+//        DatabaseConnectionManager databaseConnectionManager = new DatabaseConnectionManager(new PropertyConfig());
+//        this.bookRepository = new BookRepository(databaseConnectionManager);
+        this.bookRepository = new BookRepository();
+        this.authorRepository = new AuthorRepository();
     }
 
     @Override
@@ -40,13 +41,19 @@ public class AddBookServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         String name = req.getParameter("name");
         int countPages = Integer.parseInt(req.getParameter("countPages"));
-        long authorId = Long.parseLong(req.getParameter("authorId"));
+        int authorId = Integer.parseInt(req.getParameter("authorId"));
 
-        Book book = new Book(name, countPages, authorId);
+        Author author = authorRepository.getByIndex(authorId);
+        Book book = new Book(name, countPages, author);
 
         bookRepository.add(book);
 
         req.getSession().setAttribute("message", "Book added successfully!");
         resp.sendRedirect(req.getContextPath() + "/index");
+    }
+
+    @Override
+    public void destroy() {
+        super.destroy();
     }
 }

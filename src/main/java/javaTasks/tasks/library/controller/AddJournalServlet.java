@@ -20,8 +20,9 @@ public class AddJournalServlet extends HttpServlet {
     private final JournalRepository journalRepository;
 
     public AddJournalServlet() {
-        DatabaseConnectionManager databaseConnectionManager = new DatabaseConnectionManager(new PropertyConfig());
-        this.journalRepository = new JournalRepository(databaseConnectionManager);
+//        DatabaseConnectionManager databaseConnectionManager = new DatabaseConnectionManager(new PropertyConfig());
+//        this.journalRepository = new JournalRepository(databaseConnectionManager);
+        this.journalRepository = new JournalRepository();
     }
 
     @Override
@@ -40,7 +41,7 @@ public class AddJournalServlet extends HttpServlet {
         int publicationYear = Integer.parseInt(req.getParameter("publicationYear"));
 
         if (!journalRepository.checkPublicationYearByPattern(publicationYear)) {
-            req.setAttribute("errorMessage", "Please enter a valid publication year between 1900 and the current year.");
+            req.getSession().setAttribute("errorMessage", "Please enter a valid publication year between 1900 and the current year.");
             req.getRequestDispatcher("/html/addJournal.jsp").forward(req, resp);
             return;
         }
@@ -50,5 +51,10 @@ public class AddJournalServlet extends HttpServlet {
 
         req.getSession().setAttribute("message", "Journal added successfully!");
         resp.sendRedirect(req.getContextPath() + "/index");
+    }
+
+    @Override
+    public void destroy() {
+        super.destroy();
     }
 }

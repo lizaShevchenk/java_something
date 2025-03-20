@@ -19,17 +19,17 @@ public class Dispatcher {
 //        Repository<Author> authorRepository = Author.addAuthors(23);
 
         List<Command> commands = new ArrayList<>();
-        commands.add(new Exit(view));
-        commands.add(new Help(view));
+//        commands.add(new Exit(view));
+//        commands.add(new Help(view));
         commands.add(new ShowJournalRepository(view, journalRepository));
         commands.add(new ShowBookRepository(view, bookRepository));
         commands.add(new ShowAuthors(view, authorRepository));
         commands.add(new AddAuthor(view, authorRepository));
         commands.add(new AddBook(view, bookRepository, authorRepository));
         commands.add(new AddJournal(view, journalRepository));
-        commands.add(new DeleteJournal(view, journalRepository));
-        commands.add(new DeleteBook(view, authorRepository, bookRepository));
-        commands.add(new DeleteAuthor(view, authorRepository, bookRepository));
+//        commands.add(new DeleteJournal(view, journalRepository));
+//        commands.add(new DeleteBook(view, authorRepository, bookRepository));
+//        commands.add(new DeleteAuthor(view, authorRepository, bookRepository));
 
 //        execute(view, commands);
     }
