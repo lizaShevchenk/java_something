@@ -53,11 +53,15 @@ public class JournalRepository implements Repository<Journal> {
 //        } catch (SQLException e) {
 //            throw new JournalRepositoryException("Error when adding a journal!", e);
 //        }
+        Transaction transaction = null;
         try (Session session = connectionManager.openSession()) {
-            Transaction transaction = session.beginTransaction();
+            transaction = session.beginTransaction();
             session.merge(journal);
             transaction.commit();
         } catch (RuntimeException e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
             throw new JournalRepositoryException("Error when adding journal", e);
         }
     }

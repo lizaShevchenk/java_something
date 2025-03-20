@@ -43,11 +43,15 @@ public class AuthorRepository implements Repository<Author> {
 
     @Override
     public void add(Author author) {
+        Transaction transaction = null;
         try (Session session = connectionManager.openSession()) {
-            Transaction transaction = session.beginTransaction();
+            transaction = session.beginTransaction();
             session.merge(author);
             transaction.commit();
         } catch (RuntimeException e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
             throw new AuthorRepositoryException("Error when adding an author", e);
         }
 

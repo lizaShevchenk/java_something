@@ -42,11 +42,15 @@ public class BookRepository implements Repository<Book> {
 
     @Override
     public void add(Book book) {
+        Transaction transaction = null;
         try (Session session = connectionManager.openSession()) {
-            Transaction transaction = session.beginTransaction();
+            transaction = session.beginTransaction();
             session.merge(book);
             transaction.commit();
         } catch (RuntimeException e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
             throw new BookRepositoryException("Error when adding a book ", e);
         }
     }
